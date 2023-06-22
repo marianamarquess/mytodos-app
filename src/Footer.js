@@ -6,7 +6,7 @@ export default function Footer({ taskList }) {
   if (tasksLeft === 0)
     return (
       <footer className="footer">
-        <span>🎉 You Finished All Your Tasks!</span>
+        <span>🎉 You Completed All Your Tasks!</span>
       </footer>
     );
 

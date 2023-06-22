@@ -1,5 +1,6 @@
 import { IonIcon } from "@ionic/react";
 import { close } from "ionicons/icons";
+import PriorityTag from "./PriorityTag";
 
 export default function Task({ onToggleCheck, taskObj, isEdit, onDelete }) {
   return (
@@ -21,15 +22,30 @@ export default function Task({ onToggleCheck, taskObj, isEdit, onDelete }) {
         {taskObj.task}
       </label>
 
-      {isEdit ? (
-        <IonIcon
-          icon={close}
-          className="close-icon"
-          onClick={() => onDelete(taskObj)}
-        ></IonIcon>
-      ) : (
-        ""
-      )}
+      <div className="priority-delete-container">
+        <PriorityTag
+          priority={taskObj.priority}
+          styleProperty={
+            taskObj.isChecked
+              ? {
+                  opacity: 1,
+                  backgroundColor: "var(--color-grey)",
+                  color: "var(--color-dark-grey)",
+                }
+              : { opacity: 1 }
+          }
+        />
+
+        {isEdit ? (
+          <IonIcon
+            icon={close}
+            className="close-icon"
+            onClick={() => onDelete(taskObj)}
+          ></IonIcon>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }

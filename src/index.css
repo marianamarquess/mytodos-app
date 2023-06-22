@@ -218,3 +218,41 @@ input:placeholder-shown {
   width: fit-content;
   border-radius: 20px;
 }
+
+.priority-list {
+  display: flex;
+  gap: 10px;
+}
+
+.priority-item {
+  color: var(--color-text);
+  font-size: 14px;
+  border-radius: 15px;
+  padding: 6px;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.65;
+}
+
+.priority-list .priority-item:hover {
+  cursor: pointer;
+}
+
+.low {
+  background-color: #d9f99d;
+}
+
+.medium {
+  background-color: #fde68a;
+}
+
+.high {
+  background-color: #fecaca;
+}
+
+.priority-delete-container {
+  display: flex;
+  gap: 10px;
+}
