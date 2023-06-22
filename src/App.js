@@ -10,19 +10,23 @@ import ListItem from "./ListItem";
 import Task from "./Task";
 import PriorityList from "./PriorityList";
 import { useRef, useState } from "react";
+import SortBy from "./SortBy";
 
 setupIonicReact();
 
 function App() {
+  ///////////////////////
+  // STATE VARIABLES DEFINITION
   const [taskList, setTaskList] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [sortBy, setSortBy] = useState("most-recent");
   const [selectPriority, setSelectPriority] = useState("");
   const [displaySelectPriority, setDisplaySelectPriority] = useState(false);
-
   const addInput = useRef(null);
 
+  ///////////////////////
+  // SORT FUNCTIONALITY
   let sortedTaskList;
 
   if (sortBy === "most-recent") sortedTaskList = taskList;
@@ -30,12 +34,12 @@ function App() {
   if (sortBy === "priority") {
     const priorities = ["high", "medium", "low"];
 
-    sortedTaskList = taskList.slice().sort((a, b) => {
-      const priorityIndexA = priorities.indexOf(a.priority);
-      const priorityIndexB = priorities.indexOf(b.priority);
-
-      return priorityIndexA - priorityIndexB;
-    });
+    sortedTaskList = taskList
+      .slice()
+      .sort(
+        (a, b) =>
+          priorities.indexOf(a.priority) - priorities.indexOf(b.priority)
+      );
   }
 
   if (sortBy === "checked")
@@ -48,6 +52,8 @@ function App() {
       .slice()
       .sort((a, b) => Number(b.isChecked) - Number(a.isChecked));
 
+  /////////////////////////
+  // ADD NEW TASK HANDLER
   function handleAddItem(e) {
     e.preventDefault();
 
@@ -70,6 +76,8 @@ function App() {
     addInput.current.blur();
   }
 
+  /////////////////////////////////////
+  // TOGGLE CHECK TASK FUNCTIONALITY
   function handleToggleCheck(id) {
     setTaskList((curTaskList) =>
       curTaskList.map((taskObj) =>
@@ -80,21 +88,18 @@ function App() {
     );
   }
 
-  function handleDelete(taskObj) {
-    setTaskList((curTaskList) =>
-      curTaskList.filter((curTaskObj) => curTaskObj !== taskObj)
-    );
-  }
-
   return (
     <>
       <Header />
       <Main>
-        <ControlBar
-          isEdit={isEdit}
-          onEdit={() => setIsEdit(!isEdit)}
-          setSortBy={setSortBy}
-        />
+        <ControlBar isEdit={isEdit} onEdit={() => setIsEdit(!isEdit)}>
+          <SortBy
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            taskList={taskList}
+            sortedTaskList={sortedTaskList}
+          />
+        </ControlBar>
         <List>
           <ListItem>
             <AddTask
@@ -118,7 +123,7 @@ function App() {
                 taskObj={taskObj}
                 onToggleCheck={handleToggleCheck}
                 isEdit={isEdit}
-                onDelete={handleDelete}
+                setTaskList={setTaskList}
               />
             </ListItem>
           ))}

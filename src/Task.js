@@ -2,7 +2,13 @@ import { IonIcon } from "@ionic/react";
 import { close } from "ionicons/icons";
 import PriorityTag from "./PriorityTag";
 
-export default function Task({ onToggleCheck, taskObj, isEdit, onDelete }) {
+export default function Task({ onToggleCheck, taskObj, isEdit, setTaskList }) {
+  function handleDelete(taskObj) {
+    setTaskList((curTaskList) =>
+      curTaskList.filter((curTaskObj) => curTaskObj !== taskObj)
+    );
+  }
+
   return (
     <div className="task">
       <input
@@ -40,7 +46,7 @@ export default function Task({ onToggleCheck, taskObj, isEdit, onDelete }) {
           <IonIcon
             icon={close}
             className="close-icon"
-            onClick={() => onDelete(taskObj)}
+            onClick={() => handleDelete(taskObj)}
           ></IonIcon>
         ) : (
           ""
