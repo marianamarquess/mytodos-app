@@ -19,6 +19,9 @@ function App() {
   // STATE VARIABLES DEFINITION
   const [taskList, setTaskList] = useState(function () {
     const storedValue = localStorage.getItem("taskList");
+
+    if (!storedValue) return [];
+
     return JSON.parse(storedValue);
   });
 
