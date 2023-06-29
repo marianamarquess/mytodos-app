@@ -9,7 +9,7 @@ import AddTask from "./AddTask";
 import ListItem from "./ListItem";
 import Task from "./Task";
 import PriorityList from "./PriorityList";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SortBy from "./SortBy";
 
 setupIonicReact();
@@ -17,13 +17,33 @@ setupIonicReact();
 function App() {
   ///////////////////////
   // STATE VARIABLES DEFINITION
-  const [taskList, setTaskList] = useState([]);
+  const [taskList, setTaskList] = useState(function () {
+    const storedValue = localStorage.getItem("taskList");
+    return JSON.parse(storedValue);
+  });
+
   const [newTask, setNewTask] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [sortBy, setSortBy] = useState("most-recent");
   const [selectPriority, setSelectPriority] = useState("");
   const [displaySelectPriority, setDisplaySelectPriority] = useState(false);
+
   const addInput = useRef(null);
+
+  useEffect(function () {
+    if (selectPriority) addInput.current.focus();
+  });
+
+  function handleEdit() {
+    setIsEdit(!isEdit);
+  }
+
+  useEffect(
+    function () {
+      localStorage.setItem("taskList", JSON.stringify(taskList));
+    },
+    [taskList]
+  );
 
   ///////////////////////
   // SORT FUNCTIONALITY
@@ -53,6 +73,15 @@ function App() {
       .sort((a, b) => Number(b.isChecked) - Number(a.isChecked));
 
   /////////////////////////
+  // CLOSE ADD TASK FORM
+  function onCloseAddTask() {
+    setNewTask("");
+    setDisplaySelectPriority(false);
+    setSelectPriority("");
+    addInput.current.blur();
+  }
+
+  /////////////////////////
   // ADD NEW TASK HANDLER
   function handleAddItem(e) {
     e.preventDefault();
@@ -70,10 +99,7 @@ function App() {
       ...curTaskList,
     ]);
 
-    setNewTask("");
-    setSelectPriority("");
-    setDisplaySelectPriority(false);
-    addInput.current.blur();
+    onCloseAddTask();
   }
 
   /////////////////////////////////////
@@ -92,7 +118,7 @@ function App() {
     <>
       <Header />
       <Main>
-        <ControlBar isEdit={isEdit} onEdit={() => setIsEdit(!isEdit)}>
+        <ControlBar isEdit={isEdit} onEdit={handleEdit} addInput={addInput}>
           <SortBy
             sortBy={sortBy}
             setSortBy={setSortBy}
@@ -109,6 +135,7 @@ function App() {
               addInput={addInput}
               displaySelectPriority={displaySelectPriority}
               setDisplaySelectPriority={setDisplaySelectPriority}
+              onCloseAddTask={onCloseAddTask}
             >
               <PriorityList
                 selectPriority={selectPriority}

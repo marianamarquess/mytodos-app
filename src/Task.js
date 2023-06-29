@@ -14,7 +14,7 @@ export default function Task({ onToggleCheck, taskObj, isEdit, setTaskList }) {
       <input
         type="checkbox"
         id={`task${taskObj.id}`}
-        value={taskObj.isChecked}
+        checked={taskObj.isChecked}
         onChange={() => onToggleCheck(taskObj.id)}
       />
       <label
